@@ -7,6 +7,7 @@ import { useEffect } from 'react';
 import HttpsRedirect from "react-https-redirect";
 
 import "aos/dist/aos.css";
+import Head from 'next/head';
 
 function MyApp({ Component, pageProps }: AppProps) {
   useEffect(() => {
@@ -19,6 +20,44 @@ function MyApp({ Component, pageProps }: AppProps) {
 
   return <>
     <HttpsRedirect>
+      <Head>
+        <meta charSet="UTF-8" />
+        <meta
+          name="viewport"
+          content="width=device-width, initial-scale=1.0"
+        />
+        <meta
+          name="description"
+          content="Portland software developer with a specialty in Flutter, Kubernetes, and Golang"
+        />
+        <meta name="author" content="Landersweb LLC" />
+        <meta
+          name="keywords"
+          content="jake,landers,developer,northwest,pnw,portland,software,coding,blog,swiftui,flutter,python,dart,swift,go,api,nextjs"
+          id="keywords"
+        />
+        <link
+          rel="apple-touch-icon"
+          sizes="180x180"
+          href="/apple-touch-icon.png"
+        />
+        <link
+          rel="icon"
+          type="image/png"
+          sizes="32x32"
+          href="/favicon-32x32.png"
+        />
+        <link
+          rel="icon"
+          type="image/png"
+          sizes="16x16"
+          href="/favicon-16x16.png"
+        />
+        <link rel="manifest" href="/site.webmanifest" />
+        <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5" />
+        <meta name="msapplication-TileColor" content="#2b5797" />
+        <meta name="theme-color" content="#ffffff" />
+      </Head>
       <script
         async
         src={`https://www.googletagmanager.com/gtag/js?id=G-QFC8XN57WJ`}
