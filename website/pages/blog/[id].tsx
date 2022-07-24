@@ -57,6 +57,12 @@ const PostPage = ({ postData, post }: InferGetServerSidePropsType<typeof getServ
         }
     })
 
+    const getGithubLink = () => {
+        // https://github.com/jake-landersweb/code_vault/tree/main/${postData.body.endpoint.split("/").at(-1)
+        const list = postData.body.endpoint.split("/")
+        return `https://github.com/jake-landersweb/code_vault/tree/main/${list[list.length - 1]}`
+    }
+
     const customStyle: React.CSSProperties = {
         background: 'none',
         padding: 0
@@ -122,7 +128,7 @@ const PostPage = ({ postData, post }: InferGetServerSidePropsType<typeof getServ
                 </div>
             </div>
             <div className="grid place-items-center my-8">
-                <a href={`https://github.com/jake-landersweb/code_vault/tree/main/${postData.body.endpoint.split("/").at(-1)}`} target="_blank" rel="noopener noreferrer">
+                <a href={getGithubLink()} target="_blank" rel="noopener noreferrer">
                     <div className="px-4 py-2 bg-bg-sub border border-bg-acc rounded-md hover:opacity-50 transition-opacity">
                         <div className="flex space-x-4 items-center">
                             <AiFillGithub size={40} />
