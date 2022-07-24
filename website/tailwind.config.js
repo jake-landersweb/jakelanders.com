@@ -5,22 +5,22 @@ module.exports = {
   ],
   theme: {
     extend: {
-      // typography: {
-      //   DEFAULT: {
-      //     css: {
-      //       pre: false,
-      //       code: false,
-      //       'pre code': false,
-      //       'code::before': false,
-      //       'code::after': false
-      //     }
-      //   }
-      // }
+      typography: {
+        DEFAULT: {
+          css: {
+            pre: false,
+            code: false,
+            'pre code': false,
+            'code::before': false,
+            'code::after': false
+          }
+        }
+      },
       colors: {
         bg: {
-          DEFAULT: "#232326",
-          sub: "#2a2a2e",
-          acc: "#38383d"
+          DEFAULT: "#21252B",
+          sub: "#282C34",
+          acc: "#333842"
         },
         txt: {
           DEFAULT: '#D7D7DB',

@@ -1,9 +1,6 @@
 import { GetServerSideProps, InferGetServerSidePropsType } from "next"
 import Post from "../../data/post"
 import ApiResponse from "../../data/response"
-import ReactMarkdown from 'react-markdown'
-import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
-import { nord } from 'react-syntax-highlighter/dist/cjs/styles/prism'
 import Head from 'next/head'
 import React, { useEffect } from "react";
 import PostTags from "../../components/postTags"
@@ -12,6 +9,38 @@ import { AiFillGithub } from 'react-icons/ai'
 import { IoPersonOutline } from 'react-icons/io5'
 import { IoTimeOutline } from 'react-icons/io5'
 import { MdUpdate } from 'react-icons/md'
+
+import theme from "../../components/theme"
+
+import ReactMarkdown from 'react-markdown'
+import { PrismLight as SyntaxHighlighter } from 'react-syntax-highlighter'
+import tsx from 'react-syntax-highlighter/dist/cjs/languages/prism/tsx'
+import typescript from 'react-syntax-highlighter/dist/cjs/languages/prism/typescript'
+import bash from 'react-syntax-highlighter/dist/cjs/languages/prism/bash'
+import markdown from 'react-syntax-highlighter/dist/cjs/languages/prism/markdown'
+import json from 'react-syntax-highlighter/dist/cjs/languages/prism/json'
+import swift from 'react-syntax-highlighter/dist/cjs/languages/prism/swift'
+import dart from 'react-syntax-highlighter/dist/cjs/languages/prism/dart'
+import python from 'react-syntax-highlighter/dist/cjs/languages/prism/python'
+import go from 'react-syntax-highlighter/dist/cjs/languages/prism/go'
+import java from 'react-syntax-highlighter/dist/cjs/languages/prism/java'
+import yaml from 'react-syntax-highlighter/dist/cjs/languages/prism/yaml'
+
+import rangeParser from 'parse-numeric-range'
+import Image from "../../components/image";
+
+SyntaxHighlighter.registerLanguage('tsx', tsx)
+SyntaxHighlighter.registerLanguage('typescript', typescript)
+SyntaxHighlighter.registerLanguage('bash', bash)
+SyntaxHighlighter.registerLanguage('markdown', markdown)
+SyntaxHighlighter.registerLanguage('json', json)
+SyntaxHighlighter.registerLanguage('swift', json)
+SyntaxHighlighter.registerLanguage('swift', swift)
+SyntaxHighlighter.registerLanguage('swift', dart)
+SyntaxHighlighter.registerLanguage('swift', python)
+SyntaxHighlighter.registerLanguage('swift', go)
+SyntaxHighlighter.registerLanguage('swift', java)
+SyntaxHighlighter.registerLanguage('swift', yaml)
 
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
@@ -52,20 +81,14 @@ const PostPage = ({ postData, post }: InferGetServerSidePropsType<typeof getServ
             script.setAttribute("async", "true");
             script.setAttribute("repo", "jake-landersweb/code_vault");
             script.setAttribute("issue-term", postData.body.title);
-            script.setAttribute("theme", "photon-dark");
+            script.setAttribute("theme", "dark-blue");
             anchor.appendChild(script);
         }
     })
 
     const getGithubLink = () => {
-        // https://github.com/jake-landersweb/code_vault/tree/main/${postData.body.endpoint.split("/").at(-1)
         const list = postData.body.endpoint.split("/")
         return `https://github.com/jake-landersweb/code_vault/tree/main/${list[list.length - 1]}`
-    }
-
-    const customStyle: React.CSSProperties = {
-        background: 'none',
-        padding: 0
     }
 
     const metadata = (name: string, value: string, icon: JSX.Element) => {
@@ -76,6 +99,49 @@ const PostPage = ({ postData, post }: InferGetServerSidePropsType<typeof getServ
                 <p>{value}</p>
             </div>
         </div>
+    }
+
+    const MarkdownComponents: object = {
+        code({ node, inline, className, ...props }) {
+
+            const match = /language-(\w+)/.exec(className || '')
+            const hasMeta = node?.data?.meta
+
+            const applyHighlights: object = (applyHighlights: number) => {
+                if (hasMeta) {
+                    const RE = /{([\d,-]+)}/
+                    const metadata = node.data.meta?.replace(/\s/g, '')
+                    const strlineNumbers = RE?.test(metadata)
+                        ? RE?.exec(metadata)[1]
+                        : '0'
+                    const highlightLines = rangeParser(strlineNumbers)
+                    const highlight = highlightLines
+                    const data: string = highlight.includes(applyHighlights)
+                        ? 'highlight'
+                        : null
+                    return { data }
+                } else {
+                    return {}
+                }
+            }
+
+            return match ? (
+                <SyntaxHighlighter
+                    children={post}
+                    style={theme}
+                    language={match[1]}
+                    PreTag="div"
+                    className="codeStyle"
+                    showLineNumbers={false}
+                    wrapLines={hasMeta ? true : false}
+                    useInlineStyles={true}
+                    lineProps={applyHighlights}
+                    {...props}
+                />
+            ) : (
+                <code className={className} {...props} />
+            )
+        }
     }
 
 
@@ -103,26 +169,10 @@ const PostPage = ({ postData, post }: InferGetServerSidePropsType<typeof getServ
                     <div data-aos="fade-up" data-aos-offset="200" data-aos-delay="100" className="grid place-items-center">
                         <div className="prose prose-stone !prose-invert max-w-[92vw] md:max-w-[78vw] lg:max-w-[820px]">
                             <ReactMarkdown
-                                components={{
-                                    code({ node, inline, className, children, ...props }) {
-                                        const match = /language-(\w+)/.exec(className || '')
-                                        return !inline && match ? (
-                                            <SyntaxHighlighter
-                                                style={nord as any}
-                                                customStyle={customStyle}
-                                                language={match[1]}
-                                                PreTag="div"
-                                                showLineNumbers={true}
-                                                {...props}
-                                            >{String(children).replace(/\n$/, '')}</SyntaxHighlighter>
-                                        ) : (
-                                            <code className={className} {...props}>
-                                                {children}
-                                            </code>
-                                        )
-                                    }
-                                }}
-                            >{post}</ReactMarkdown>
+                                components={MarkdownComponents}
+                            >
+                                {post}
+                            </ReactMarkdown>
                         </div>
                     </div>
                 </div>

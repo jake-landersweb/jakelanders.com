@@ -29,7 +29,7 @@ const PostCell = ({ post }: { post: Post }) => {
 
     return <>
         <div className="border bg-bg-sub border-bg-acc rounded-md">
-            <div style={styles} className={`h-[150px] ${post.imageUrl == undefined ? "bg-main bg-opacity-50 rounded-md" : ""}`}></div>
+            <div style={styles} className={`h-[500px] ${post.imageUrl == undefined ? "bg-main bg-opacity-50 rounded-md" : ""}`}></div>
             <div className={`space-y-4 p-4 border border-t-bg-acc border-bg-sub`}>
                 <div className="">
                     <Link href={`/blog/${generateSlug()}`}><a><h2 className='text-3xl font-semibold hover:opacity-50 transition-opacity'>{post.title}</h2></a></Link>
