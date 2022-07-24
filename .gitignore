@@ -2,3 +2,4 @@ init.sql
 docker-compose.yaml
 mysql/
 logs/
+*.DS_STORE

@@ -126,7 +126,7 @@ const Home = () => {
       </div>
       <div className="grid place-items-center space-y-16">
         <Label text={"Skills & Technologies"} />
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8s">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8s overflow-hidden md:overflow-visible">
           <div data-aos="fade-up-right" data-aos-offset="200" data-aos-delay="0">
             <SkillsCell props={{
               title: "Flutter",
