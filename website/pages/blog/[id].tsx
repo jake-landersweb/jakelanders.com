@@ -127,7 +127,6 @@ const PostPage = ({ postData, post }: InferGetServerSidePropsType<typeof getServ
 
             return match ? (
                 <SyntaxHighlighter
-                    children={post}
                     style={theme}
                     language={match[1]}
                     PreTag="div"
@@ -137,7 +136,7 @@ const PostPage = ({ postData, post }: InferGetServerSidePropsType<typeof getServ
                     useInlineStyles={true}
                     lineProps={applyHighlights}
                     {...props}
-                />
+                >{post}</SyntaxHighlighter>
             ) : (
                 <code className={className} {...props} />
             )
