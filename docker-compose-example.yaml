@@ -1,0 +1,54 @@
+services:
+  jake_blog_db:
+    container_name: jake_blog_db
+    image: mariadb
+    environment:
+      MYSQL_USER:
+      MYSQL_USER_PASSWORD:
+      MYSQL_ROOT_PASSWORD:
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./mysql:/var/lib/mysql
+
+  jake_blog_api:
+    container_name: jake_blog_api
+    build:
+      context: ./repo_scraper/
+      dockerfile: Dockerfile
+    ports:
+      - 8081:8081
+    environment:
+      - APIHOST=0.0.0.0
+      - APIPORT=8081
+      - MYSQLHOST=jake_blog_db
+      - MYSQLPORT=3306
+      - MYSQLUSER=
+      - MYSQLPASS=
+      - MYSQLDB=
+      - APIKEY=
+      - LOGGERPATH=logs/
+      - SECURE=false
+    volumes:
+      - ./logs/:/logs/
+    links:
+      - jake_blog_db
+
+  jake_blog_site:
+    container_name: jake_blog_site
+    build:
+      context: ./website/
+      dockerfile: Dockerfile
+    ports:
+      - 3003:3003
+    environment:
+      - HOST=http://jake_blog_api:8081
+      - KEY=
+      - MAIL_HOST=
+      - MAIL_KEY=
+      - NEXT_PUBLIC_MAIL_SMTP=
+      - NEXT_PUBLIC_MAIL_USER=success@crosschecksports.com
+      - NEXT_PUBLIC_MAIL_PASS=
+    volumes:
+      - .:/website/jakelanders
+    links:
+      - jake_blog_api
