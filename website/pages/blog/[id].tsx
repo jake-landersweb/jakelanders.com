@@ -9,38 +9,10 @@ import { AiFillGithub } from 'react-icons/ai'
 import { IoPersonOutline } from 'react-icons/io5'
 import { IoTimeOutline } from 'react-icons/io5'
 import { MdUpdate } from 'react-icons/md'
-
-import theme from "../../components/theme"
-
-import ReactMarkdown from 'react-markdown'
-import { PrismLight as SyntaxHighlighter } from 'react-syntax-highlighter'
-import tsx from 'react-syntax-highlighter/dist/cjs/languages/prism/tsx'
-import typescript from 'react-syntax-highlighter/dist/cjs/languages/prism/typescript'
-import bash from 'react-syntax-highlighter/dist/cjs/languages/prism/bash'
-import markdown from 'react-syntax-highlighter/dist/cjs/languages/prism/markdown'
-import json from 'react-syntax-highlighter/dist/cjs/languages/prism/json'
-import swift from 'react-syntax-highlighter/dist/cjs/languages/prism/swift'
-import dart from 'react-syntax-highlighter/dist/cjs/languages/prism/dart'
-import python from 'react-syntax-highlighter/dist/cjs/languages/prism/python'
-import go from 'react-syntax-highlighter/dist/cjs/languages/prism/go'
-import java from 'react-syntax-highlighter/dist/cjs/languages/prism/java'
-import yaml from 'react-syntax-highlighter/dist/cjs/languages/prism/yaml'
-
-import rangeParser from 'parse-numeric-range'
-import Image from "../../components/image";
-
-SyntaxHighlighter.registerLanguage('tsx', tsx)
-SyntaxHighlighter.registerLanguage('typescript', typescript)
-SyntaxHighlighter.registerLanguage('bash', bash)
-SyntaxHighlighter.registerLanguage('markdown', markdown)
-SyntaxHighlighter.registerLanguage('json', json)
-SyntaxHighlighter.registerLanguage('swift', json)
-SyntaxHighlighter.registerLanguage('swift', swift)
-SyntaxHighlighter.registerLanguage('swift', dart)
-SyntaxHighlighter.registerLanguage('swift', python)
-SyntaxHighlighter.registerLanguage('swift', go)
-SyntaxHighlighter.registerLanguage('swift', java)
-SyntaxHighlighter.registerLanguage('swift', yaml)
+import { IoIosInformationCircleOutline } from 'react-icons/io'
+import CodeBlock from "../../components/codeBlock";
+import ReactMarkdown from "react-markdown";
+import Image from "next/image";
 
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
@@ -101,46 +73,68 @@ const PostPage = ({ postData, post }: InferGetServerSidePropsType<typeof getServ
         </div>
     }
 
+    const generateSlug = (text: string) => {
+        return text.toLowerCase().split(" ").join("-")
+    }
+
     const MarkdownComponents: object = {
         code({ node, inline, className, ...props }) {
+            return CodeBlock({ node, inline, className, ...props })
+        },
+        blockquote({ node, inline, className, ...props }) {
+            console.log(node)
+            return <div className="pt-4 px-4 border border-bg-acc rounded-md">
+                <div className="flex space-x-2 content-center text-txt-400">
+                    <IoIosInformationCircleOutline size={20} />
+                    <div className="font-mono text-sm">NOTE:</div>
+                </div>
+                <span {...props} />
+            </div>
+        },
+        p: (paragraph: { children?: boolean; node?: any }) => {
+            const { node } = paragraph
 
-            const match = /language-(\w+)/.exec(className || '')
-            const hasMeta = node?.data?.meta
+            if (node.children[0].tagName === "img") {
+                const image = node?.children[0]
+                const metastring = image?.properties?.alt
+                const alt = metastring?.replace(/ *\{[^)]*\} */g, "")
+                const metaWidth = metastring?.match(/{([^}]+)x/)
+                const metaHeight = metastring?.match(/x([^}]+)}/)
+                const width = metaWidth ? metaWidth[1] : "768"
+                const height = metaHeight ? metaHeight[1] : "432"
+                const isPriority = metastring?.toLowerCase().match('{priority}')
+                const hasCaption = metastring?.toLowerCase().includes('{caption:')
+                const caption = metastring?.match(/{caption: (.*?)}/)?.pop()
 
-            const applyHighlights: object = (applyHighlights: number) => {
-                if (hasMeta) {
-                    const RE = /{([\d,-]+)}/
-                    const metadata = node.data.meta?.replace(/\s/g, '')
-                    const strlineNumbers = RE?.test(metadata)
-                        ? RE?.exec(metadata)[1]
-                        : '0'
-                    const highlightLines = rangeParser(strlineNumbers)
-                    const highlight = highlightLines
-                    const data: string = highlight.includes(applyHighlights)
-                        ? 'highlight'
-                        : null
-                    return { data }
-                } else {
-                    return {}
-                }
+                return (
+                    <div className="postImgWrapper">
+                        <Image
+                            src={image.properties.src}
+                            width={width}
+                            height={height}
+                            className="postImg"
+                            alt={alt}
+                            priority={isPriority}
+                        />
+                        {hasCaption ? <div className="caption" aria-label={caption}>{caption}</div> : null}
+                    </div>
+                )
             }
-
-            return match ? (
-                <SyntaxHighlighter
-                    style={theme}
-                    language={match[1]}
-                    PreTag="div"
-                    className="codeStyle"
-                    showLineNumbers={false}
-                    wrapLines={hasMeta ? true : false}
-                    useInlineStyles={true}
-                    lineProps={applyHighlights}
-                    {...props}
-                >{post}</SyntaxHighlighter>
-            ) : (
-                <code className={className} {...props} />
-            )
-        }
+            return <p>{paragraph.children}</p>
+        },
+        a: (anchor: { href: string; children: Array<any> }) => {
+            if (anchor.href.match('http')) {
+                return (
+                    <a
+                        href={anchor.href}
+                        target="_blank"
+                        rel="noopener noreferrer">
+                        {anchor.children}
+                    </a>
+                )
+            }
+            return <a href={anchor.href}>{anchor.children}</a>
+        },
     }
 
 
@@ -166,7 +160,8 @@ const PostPage = ({ postData, post }: InferGetServerSidePropsType<typeof getServ
                         </div>
                     </div>
                     <div data-aos="fade-up" data-aos-offset="200" data-aos-delay="100" className="grid place-items-center">
-                        <div className="prose prose-stone !prose-invert max-w-[92vw] md:max-w-[78vw] lg:max-w-[820px]">
+                        <div className="prose prose-stone !prose-invert prose-a:text-main max-w-[92vw] md:max-w-[78vw] lg:max-w-[820px]">
+                            {/* <div className="prose prose-stone !prose-invert"> */}
                             <ReactMarkdown
                                 components={MarkdownComponents}
                             >

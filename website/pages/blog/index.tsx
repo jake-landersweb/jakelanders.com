@@ -45,9 +45,9 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 }
 
 const Blog = ({ pageData, page, pageSize }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
-    React.useEffect(() => {
-        window.scrollTo(0, 0)
-    }, [])
+    // React.useEffect(() => {
+    //     window.scrollTo(0, 0)
+    // }, [])
 
     return <>
         <Head>
