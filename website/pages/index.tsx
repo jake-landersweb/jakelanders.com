@@ -63,10 +63,10 @@ const Home = () => {
           </div>
           <div data-aos="fade-up" data-aos-offset="200">
             <ExperienceCell props={{
-              title: "Landerweb",
+              title: "Sapphire",
               dateRange: "January 2022 - Present",
-              imageSrc: "/svg/lw.svg",
-              imageAlt: "landersweb logo",
+              imageSrc: "/svg/sapphire.svg",
+              imageAlt: "Sapphire logo",
               description: "A family business I started with my father during the development of Crosscheck Sports. We build some of the best software in the pacific northwest pulling in expertise from our careers in the industry working for some of the top tech companies in the world."
             }} />
           </div>
@@ -83,8 +83,8 @@ const Home = () => {
       </div>
       <div className="grid place-items-center space-y-16">
         <Label text={"Projects"} />
-        <div className="space-y-8">
-          <div data-aos="fade-up" data-aos-offset="200">
+        <div className="space-y-8 md:grid md:grid-cols-2 lg:grid-cols-3 md:gap-12 md:space-y-0">
+          <div data-aos="fade-up" data-aos-offset="200" data-aos-delay="0">
             <ProjectCell props={{
               title: "Crosscheck Sports",
               imageSrc: "/images/xcheck.png",
@@ -93,7 +93,7 @@ const Home = () => {
               link: "https://www.crosschecksports.com"
             }} />
           </div>
-          <div data-aos="fade-up" data-aos-offset="200">
+          <div data-aos="fade-up" data-aos-offset="200" data-aos-delay="25">
             <ProjectCell props={{
               title: "Enterprise Emailer",
               imageSrc: "/images/dart.png",
@@ -102,7 +102,7 @@ const Home = () => {
               link: "https://github.com/jake-landersweb/dart_mailer"
             }} />
           </div>
-          <div data-aos="fade-up" data-aos-offset="200">
+          <div data-aos="fade-up" data-aos-offset="200" data-aos-delay="50">
             <ProjectCell props={{
               title: "Calorie Me",
               imageSrc: "/images/calorieme.png",
@@ -112,13 +112,33 @@ const Home = () => {
               imageClass: "rounded-full"
             }} />
           </div>
-          <div data-aos="fade-up" data-aos-offset="200">
+          <div data-aos="fade-up" data-aos-offset="200" data-aos-delay="75">
             <ProjectCell props={{
               title: "jakelanders.com",
               imageSrc: "/svg/logo.svg",
               imageAlt: "jake logo",
               description: "A blog as an excuse to delve into the world of gitops. Posts are all hosted in github with a config yaml file and an image. This information is periodically added to a basic database and used to drive the blog. Any updates on the github pages change the content in the blog. A comment section is also provided using github issues.",
               link: "https://www.jakelanders.com/blog",
+              imageClass: ""
+            }} />
+          </div>
+          <div data-aos="fade-up" data-aos-offset="200" data-aos-delay="100">
+            <ProjectCell props={{
+              title: "Neural Network",
+              imageSrc: "/images/nn.png",
+              imageAlt: "neural network",
+              description: "Implementation of a functioning neural network implemented entirely in the dart programming language without the aid of packages. Dense layers, activation functions, loss functions, optimizers trained on the mnist dataset to guess handwritten digits. Created out of my curiosity on how the math behind neural networks work.",
+              link: "https://nn.jakelanders.com",
+              imageClass: ""
+            }} />
+          </div>
+          <div data-aos="fade-up" data-aos-offset="200" data-aos-delay="125">
+            <ProjectCell props={{
+              title: "Sapphire Marketing Site",
+              imageSrc: "/svg/sapphire.svg",
+              imageAlt: "Sapphire logo",
+              description: "Marketing website for my business built with NextJS. Focused on creating a beautiful user experience and flawless design. This website really helped hone my React skills, and combined with this website has made me confident on building any sort of website/application needed of anyone.",
+              link: "https://sapphirenw.com",
               imageClass: ""
             }} />
           </div>

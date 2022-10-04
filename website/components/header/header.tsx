@@ -43,7 +43,7 @@ const Header = () => {
             </div>
             <div className="">
                 <HeaderItem props={{
-                    route: '#contact',
+                    route: '/contact',
                     title: 'Contact',
                     icon: <FiMail />,
                     onTap: () => closeMenu(),

@@ -21,8 +21,8 @@ const BlogSearch = ({ props }: { props: BlogSearchProps }) => {
 
     return <>
         <div className="space-y-8">
-            <h2 id="test" className='text-4xl md:text-6xl text-center'>{title}</h2>
-            <div className="flex space-x-2 items-center">
+            <h2 id="test" className='text-4xl md:text-6xl text-center font-bold'>{title}</h2>
+            <div className="flex space-x-2 items-center max-w-2xl mx-auto">
                 <Field props={{
                     value: searchText,
                     label: '',

@@ -12,7 +12,9 @@ import { MdUpdate } from 'react-icons/md'
 import { IoIosInformationCircleOutline } from 'react-icons/io'
 import CodeBlock from "../../components/codeBlock";
 import ReactMarkdown from "react-markdown";
-import Image from "next/image";
+import NextImage from "next/image";
+import Image from "../../components/image";
+
 
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
@@ -108,7 +110,7 @@ const PostPage = ({ postData, post }: InferGetServerSidePropsType<typeof getServ
 
                 return (
                     <div className="postImgWrapper">
-                        <Image
+                        <NextImage
                             src={image.properties.src}
                             width={width}
                             height={height}
@@ -147,19 +149,29 @@ const PostPage = ({ postData, post }: InferGetServerSidePropsType<typeof getServ
             <div className="grid place-items-center">
                 <div className="space-y-16">
                     <div className="space-y-8">
-                        <h2 className="text-4xl md:text-6xl text-center">{postData.body.title}</h2>
-                        <div className="grid place-items-center gap-y-4">
-                            <div data-aos="fade-up" data-aos-offset="200" data-aos-delay="0" className="md:flex md:space-x-4 md:space-y-0 space-y-2">
-                                {metadata("Author", "Jake Landers", <IoPersonOutline size={30} />)}
-                                {metadata("Created", postData.body.created, <IoTimeOutline size={30} />)}
-                                {metadata("Updated", postData.body.updated, <MdUpdate size={30} />)}
+                        <div data-aos="fade-up" data-aos-offset="200" data-aos-delay="0" className="">
+                            <div className="flex space-x-4 items-center">
+                                <Image props={{
+                                    src: "/images/jake.jpg",
+                                    alt: "jake hockey",
+                                    divClass: "w-[100px] h-[100px]",
+                                    imgClass: "rounded-full aspect-square"
+                                }} />
+                                <div className="">
+                                    <p className="text-2xl font-bold tracking-tight">Jake Landers</p>
+                                    <p className="text-txt-400">Developer and CEO SapphireNW</p>
+                                    <p className="text-txt-400">{postData.body.created}</p>
+                                </div>
                             </div>
-                            <div data-aos="fade-up" data-aos-offset="200" data-aos-delay="50">
+                        </div>
+                        <h2 className="text-4xl md:text-6xl text-center" data-aos="fade-up" data-aos-offset="200" data-aos-delay="50">{postData.body.title}</h2>
+                        <div className="grid place-items-center gap-y-4">
+                            <div data-aos="fade-up" data-aos-offset="200" data-aos-delay="100">
                                 <PostTags tags={postData.body.tags} textSize="text-md" />
                             </div>
                         </div>
                     </div>
-                    <div data-aos="fade-up" data-aos-offset="200" data-aos-delay="100" className="grid place-items-center">
+                    <div data-aos="fade-up" data-aos-offset="200" data-aos-delay="150" className="grid place-items-center">
                         <div className="prose prose-stone !prose-invert prose-a:text-main max-w-[92vw] md:max-w-[78vw] lg:max-w-[820px]">
                             {/* <div className="prose prose-stone !prose-invert"> */}
                             <ReactMarkdown

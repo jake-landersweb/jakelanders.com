@@ -55,7 +55,7 @@ const Blog = ({ pageData, page, pageSize }: InferGetServerSidePropsType<typeof g
             <meta name="keywords" content="jake,landers,developer,northwest,pnw,portland,software,coding,blog,swiftui,flutter,python,dart,swift,go,api,nextjs" id="keywords" />
         </Head>
         <div className="space-y-32">
-            <div className="grid place-items-center">
+            <div className="text-center">
                 <BlogSearch props={{
                     title: 'Latest Post',
                     initialValue: ''
