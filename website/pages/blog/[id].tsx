@@ -2,7 +2,7 @@ import { GetServerSideProps, InferGetServerSidePropsType } from "next"
 import Post from "../../data/post"
 import ApiResponse from "../../data/response"
 import Head from 'next/head'
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import PostTags from "../../components/postTags"
 import Label from "../../components/label"
 import { AiFillGithub } from 'react-icons/ai'
@@ -21,7 +21,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     // get id from params
     const id = context.params!.id?.toString().split("-")[0]
 
-    console.log(id)
     const postDataResponse = await fetch(`${process.env.HOST!}/posts/${id}`, {
         headers: [["Content-Type", "application/json"], ["x-api-key", process.env.KEY!.toString()]],
     })
@@ -58,7 +57,67 @@ const PostPage = ({ postData, post }: InferGetServerSidePropsType<typeof getServ
             script.setAttribute("theme", "dark-blue");
             anchor.appendChild(script);
         }
+        // create navigation header
+
     })
+
+    const getNav = () => {
+        const navItems = []
+        const postLines = post.split("\n")
+        const tempHeaders = []
+        for (var i = 0; i < postLines.length; i++) {
+            const line: string = postLines[i]
+            if (line.startsWith("## ")) {
+                const newTitle = line.split(" ")
+                newTitle.shift()
+                tempHeaders.push({ "title": newTitle.join(" "), "children": [] })
+            }
+            if (line.startsWith("### ")) {
+                var last = tempHeaders.pop()
+                const newTitle = line.split(" ")
+                newTitle.shift()
+                last['children'].push({ "title": newTitle.join(" "), "children": [] })
+                tempHeaders.push(last)
+            }
+            if (line.startsWith("#### ")) {
+                var last = tempHeaders.pop()
+                var lastlast = last['children'].pop()
+                const newTitle = line.split(" ")
+                newTitle.shift()
+                lastlast['children'].push({ "title": newTitle.join(" "), "children": [] })
+                last['children'].push(lastlast)
+                tempHeaders.push(last)
+            }
+        }
+        for (var i = 0; i < tempHeaders.length; i++) {
+            const currentHeader = tempHeaders[i]
+            if (currentHeader['children'].length == 0) {
+                navItems.push(createNavLink(currentHeader['title'], "text-lg font-medium text-txt-200 hover:opacity-70"))
+            } else {
+                const subHeaders = []
+                // loop through children
+                for (var j = 0; j < currentHeader['children'].length; j++) {
+                    const subHeader = currentHeader['children'][j]
+                    if (subHeader['children'].length == 0) {
+                        subHeaders.push(createNavLink(subHeader['title'], "text-txt-400 hover:text-main"))
+                    } else {
+                        const subsubHeaders = []
+                        for (var g = 0; g < subHeader['children'].length; g++) {
+                            const subsubHeader = subHeader['children'][g]
+                            subsubHeaders.push(createNavLink(subsubHeader['title'], "text-txt-500 hover:text-main"))
+                        }
+                        subHeaders.push(<div>{createNavLink(subHeader['title'], "text-txt-400 hover:text-main")}<div className="pl-4">{subsubHeaders}</div></div>)
+                    }
+                }
+                navItems.push(<div>{createNavLink(currentHeader['title'], "text-lg font-medium text-txt-200 hover:opacity-70")}<div className="pl-4">{subHeaders}</div></div>)
+            }
+        }
+        return navItems
+    }
+
+    const createNavLink = (title: string, className: string = "") => {
+        return <a className={`transition-all ${className}`} href={`#${generateSlug(title)}`}><p className="whitespace-nowrap">{title}</p></a>
+    }
 
     const getGithubLink = () => {
         const list = postData.body.endpoint.split("/")
@@ -75,8 +134,22 @@ const PostPage = ({ postData, post }: InferGetServerSidePropsType<typeof getServ
         </div>
     }
 
-    const generateSlug = (text: string) => {
-        return text.toLowerCase().split(" ").join("-")
+    const generateSlug = (str: string) => {
+
+        str = str?.replace(/^\s+|\s+$/g, '')
+        str = str?.toLowerCase()
+        const from = 'àáãäâèéëêìíïîòóöôùúüûñç·/_,:;'
+        const to = 'aaaaaeeeeiiiioooouuuunc------'
+
+        for (let i = 0, l = from.length; i < l; i++) {
+            str = str.replace(new RegExp(from.charAt(i), 'g'), to.charAt(i))
+        }
+
+        str = str?.replace(/[^a-z0-9 -]/g, '')
+            .replace(/\s+/g, '-')
+            .replace(/-+/g, '-')
+
+        return str
     }
 
     const MarkdownComponents: object = {
@@ -84,7 +157,6 @@ const PostPage = ({ postData, post }: InferGetServerSidePropsType<typeof getServ
             return CodeBlock({ node, inline, className, ...props })
         },
         blockquote({ node, inline, className, ...props }) {
-            console.log(node)
             return <div className="pt-4 px-4 border border-bg-acc rounded-md">
                 <div className="flex space-x-2 content-center text-txt-400">
                     <IoIosInformationCircleOutline size={20} />
@@ -92,6 +164,56 @@ const PostPage = ({ postData, post }: InferGetServerSidePropsType<typeof getServ
                 </div>
                 <span {...props} />
             </div>
+        },
+        // remove large headers, as they are most likely a mistake
+        h1: (props: any) => {
+            return <div className=""></div>
+        },
+        h2: (props: any) => {
+            const arr = props.children
+            let heading = ''
+
+            for (let i = 0; i < arr.length; i++) {
+                if (arr[i]?.type !== undefined) {
+                    for (let j = 0; j < arr[i].props.children.length; j++) {
+                        heading += arr[i]?.props?.children[0]
+                    }
+                } else heading += arr[i]
+            }
+
+            const slug = generateSlug(heading)
+            return <h2 id={slug} {...props}></h2>
+        },
+        h3: (props: any) => {
+            const arr = props.children
+            let heading = ''
+
+            for (let i = 0; i < arr.length; i++) {
+                if (arr[i]?.type !== undefined) {
+                    for (let j = 0; j < arr[i].props.children.length; j++) {
+                        heading += arr[i]?.props?.children[0]
+                    }
+                } else heading += arr[i]
+            }
+
+            const slug = generateSlug(heading)
+
+            return <h3 id={slug} {...props}></h3>
+        },
+        h4: (props: any) => {
+            const arr = props.children
+            let heading = ''
+
+            for (let i = 0; i < arr.length; i++) {
+                if (arr[i]?.type !== undefined) {
+                    for (let j = 0; j < arr[i].props.children.length; j++) {
+                        heading += arr[i]?.props?.children[0]
+                    }
+                } else heading += arr[i]
+            }
+
+            const slug = generateSlug(heading)
+            return <h4 id={slug} {...props}></h4>
         },
         p: (paragraph: { children?: boolean; node?: any }) => {
             const { node } = paragraph
@@ -171,15 +293,30 @@ const PostPage = ({ postData, post }: InferGetServerSidePropsType<typeof getServ
                             </div>
                         </div>
                     </div>
-                    <div data-aos="fade-up" data-aos-offset="200" data-aos-delay="150" className="grid place-items-center">
-                        <div className="prose prose-stone !prose-invert prose-a:text-main max-w-[92vw] md:max-w-[78vw] lg:max-w-[820px]">
-                            {/* <div className="prose prose-stone !prose-invert"> */}
-                            <ReactMarkdown
-                                components={MarkdownComponents}
-                            >
-                                {post}
-                            </ReactMarkdown>
+                    <div className="flex flex-row-reverse" data-aos="fade-up" data-aos-offset="200" data-aos-delay="100">
+                        <div className="hidden md:block bg-bg-sub rounded-md border border-bg-acc ml-4 sticky inset-x-0 top-[75px] left-0 h-min max-h-[70vh] w-max">
+                            <div className="overflow-y-scroll max-h-[70vh]">
+                                <p className="text-2xl font-medium text-center bg-bg-acc p-2 whitespace-nowrap">Table of Contents</p>
+                                <div className="p-4">
+                                    {getNav()}
+                                </div>
+                            </div>
                         </div>
+                        <div className="grid grid-cols-4 place-items-center">
+                            <div className="prose prose-stone !prose-invert prose-a:text-main max-w-full col-span-4">
+                                <ReactMarkdown components={MarkdownComponents}>
+                                    {post}
+                                </ReactMarkdown>
+                            </div>
+                        </div>
+                        {/* <div data-aos="fade-up" data-aos-offset="200" data-aos-delay="150" className="">
+                            <div className="prose prose-stone !prose-invert prose-a:text-main max-w-[92vw] md:max-w-[78vw] lg:max-w-[820px]">
+                            <div className="prose prose-stone !prose-invert prose-a:text-main">
+                                <ReactMarkdown components={MarkdownComponents}>
+                                    {post}
+                                </ReactMarkdown>
+                            </div>
+                        </div> */}
                     </div>
                 </div>
             </div>

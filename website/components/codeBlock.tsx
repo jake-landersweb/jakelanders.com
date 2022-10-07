@@ -65,10 +65,6 @@ const CodeBlock = ({ node, inline, className, ...props }) => {
         }
     }
 
-    if (!match) {
-        console.log(node)
-    }
-
     return match ? (
         <div className="relative group">
             <div className="absolute opacity-0 group-hover:opacity-100 z-10 right-0 top-0 transition-all">

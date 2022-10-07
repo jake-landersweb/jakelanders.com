@@ -79,7 +79,7 @@ function MyApp({ Component, pageProps }: AppProps) {
           <div className="fixed top-0 z-50">
             <Header />
           </div>
-          <div className="relative w-full max-w-[1200px] px-4 lg:px-20 md:px-10 min-h-screen pt-[100px] pb-24 md:pb-36">
+          <div className="relative w-full max-w-[1200px] px-4 lg:px-20 md:px-10 min-h-screen mt-[100px] pb-24 md:pb-36">
             <Component {...pageProps} />
           </div>
           <div className="pt-4 w-full">
