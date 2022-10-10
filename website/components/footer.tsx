@@ -8,7 +8,7 @@ const Footer = () => {
         <footer className="p-4 bg-bg-sub shadow md:px-6 md:py-8">
             <div className="flex items-center">
                 <Link props={{
-                    href: "https://sahppirenw.com",
+                    href: "https://sapphirenw.com",
                     child: <div className="flex items-center">
                         <Image props={{
                             src: "/svg/sapphire.svg",
