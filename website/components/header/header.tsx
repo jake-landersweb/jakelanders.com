@@ -1,9 +1,6 @@
 import { useState, useEffect } from "react";
-import HeaderItem from './headerItem';
-import { BsFilePostFill } from 'react-icons/bs'
 import { AiFillGithub } from 'react-icons/ai'
 import { FiMail } from 'react-icons/fi'
-import Image from '../image';
 import Link from "../link";
 import { MdOutlineArticle } from "react-icons/md";
 import { useRouter } from "next/router";
@@ -11,7 +8,6 @@ import { AiOutlineHome } from 'react-icons/ai'
 
 const Header = () => {
     const [scrollY, setScrollY] = useState(0);
-    const [isOpen, setIsOpen] = useState(false);
     const router = useRouter()
     console.log(router.pathname == "/")
 
@@ -25,75 +21,32 @@ const Header = () => {
         () => window.removeEventListener("scroll", handleScroll);
     }, [])
 
-    const handleClick = () => {
-        setIsOpen(!isOpen);
-    }
-
-
-    const closeMenu = () => {
-        setIsOpen(false);
-    };
-
-    const menu = (className: string) => {
-        return <div className={className}>
-            <div className="">
-                <HeaderItem props={{
-                    route: '/blog',
-                    title: 'Blog',
-                    icon: <BsFilePostFill />,
-                    onTap: () => closeMenu(),
-                    isCollapsed: scrollY > 50,
-                    isExternal: false,
-                }} />
-            </div>
-            <div className="">
-                <HeaderItem props={{
-                    route: '/contact',
-                    title: 'Contact',
-                    icon: <FiMail />,
-                    onTap: () => closeMenu(),
-                    isCollapsed: scrollY > 50,
-                    isExternal: false,
-                }} />
-            </div>
-            <div className="">
-                <HeaderItem props={{
-                    route: 'https://github.com/jake-landersweb',
-                    title: 'Github',
-                    icon: <AiFillGithub />,
-                    onTap: () => closeMenu(),
-                    isCollapsed: scrollY > 50,
-                    isExternal: true,
-                }} />
-            </div>
-        </div>
-    }
 
     return <div className="w-screen fixed top-0 left-0">
         <div className="grid grid-cols-3 gap-0 bg-bg-acc auto-cols-max">
             <Link props={{
-                href: router.pathname == "/" ? "https://github.com/jake-landersweb" : "/",
+                href: "https://github.com/jake-landersweb",
                 child: <div className="flex items-center space-x-2">
-                    {router.pathname == "/" ? <AiFillGithub /> : <AiOutlineHome />}
-                    <p>{router.pathname == "/" ? "Github" : "Home"}</p>
+                    <AiFillGithub />
+                    <p>Github</p>
                 </div>,
-                isExternal: router.pathname == "/",
+                isExternal: true,
                 className: "col-span-1 md:hover:bg-bg-sub transition-all text-center p-2 border-r-[0.5px] border-bg-sub grid place-items-center"
             }} />
             <Link props={{
-                href: "/blog",
+                href: router.pathname == "/blog" ? "/" : "/blog",
                 child: <div className="flex items-center space-x-2">
-                    <MdOutlineArticle />
-                    <p>Blog</p>
+                    {router.pathname == "/home" ? <AiOutlineHome /> : <MdOutlineArticle />}
+                    <p>{router.pathname == "/blog" ? "Home" : "Blog"}</p>
                 </div>,
                 isExternal: false,
                 className: "col-span-1 md:hover:bg-bg-sub transition-all text-center p-2 border-x-[0.5px] border-bg-sub grid place-items-center"
             }} />
             <Link props={{
-                href: "/contact",
+                href: router.pathname == "/contact" ? "/" : "/contact",
                 child: <div className="flex items-center space-x-2">
-                    <FiMail />
-                    <p>Contact</p>
+                    {router.pathname == "/contact" ? <AiOutlineHome /> : <FiMail />}
+                    <p>{router.pathname == "/contact" ? "Home" : "Contact"}</p>
                 </div>,
                 isExternal: false,
                 className: "col-span-1 md:hover:bg-bg-sub transition-all text-center p-2 border-l-[0.5px] border-bg-sub grid place-items-center"
