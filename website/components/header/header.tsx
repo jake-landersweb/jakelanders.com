@@ -36,7 +36,7 @@ const Header = () => {
             <Link props={{
                 href: router.pathname == "/blog" ? "/" : "/blog",
                 child: <div className="flex items-center space-x-2">
-                    {router.pathname == "/home" ? <AiOutlineHome /> : <MdOutlineArticle />}
+                    {router.pathname == "/blog" ? <AiOutlineHome /> : <MdOutlineArticle />}
                     <p>{router.pathname == "/blog" ? "Home" : "Blog"}</p>
                 </div>,
                 isExternal: false,
