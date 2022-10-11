@@ -69,7 +69,7 @@ const Header = () => {
         </div>
     }
 
-    return <div className="w-screen">
+    return <div className="w-screen fixed top-0 left-0">
         <div className="grid grid-cols-3 gap-0 bg-bg-acc auto-cols-max">
             <Link props={{
                 href: router.pathname == "/" ? "https://github.com/jake-landersweb" : "/",
@@ -78,7 +78,7 @@ const Header = () => {
                     <p>{router.pathname == "/" ? "Github" : "Home"}</p>
                 </div>,
                 isExternal: router.pathname == "/",
-                className: "col-span-1 md:hover:bg-bg-sub transition-all text-center p-2 border-l-[0.5px] border-bg-sub grid place-items-center"
+                className: "col-span-1 md:hover:bg-bg-sub transition-all text-center p-2 border-r-[0.5px] border-bg-sub grid place-items-center"
             }} />
             <Link props={{
                 href: "/blog",
@@ -87,7 +87,7 @@ const Header = () => {
                     <p>Blog</p>
                 </div>,
                 isExternal: false,
-                className: "col-span-1 md:hover:bg-bg-sub transition-all text-center p-2 border-r-[0.5px] border-bg-sub grid place-items-center"
+                className: "col-span-1 md:hover:bg-bg-sub transition-all text-center p-2 border-x-[0.5px] border-bg-sub grid place-items-center"
             }} />
             <Link props={{
                 href: "/contact",
@@ -96,7 +96,7 @@ const Header = () => {
                     <p>Contact</p>
                 </div>,
                 isExternal: false,
-                className: "col-span-1 md:hover:bg-bg-sub transition-all text-center p-2 border-x-[0.5px] border-bg-sub grid place-items-center"
+                className: "col-span-1 md:hover:bg-bg-sub transition-all text-center p-2 border-l-[0.5px] border-bg-sub grid place-items-center"
             }} />
         </div>
     </div>
