@@ -222,24 +222,12 @@ const PostPage = ({ postData, post }: InferGetServerSidePropsType<typeof getServ
                 const image = node?.children[0]
                 const metastring = image?.properties?.alt
                 const alt = metastring?.replace(/ *\{[^)]*\} */g, "")
-                const metaWidth = metastring?.match(/{([^}]+)x/)
-                const metaHeight = metastring?.match(/x([^}]+)}/)
-                const width = metaWidth ? metaWidth[1] : "768"
-                const height = metaHeight ? metaHeight[1] : "432"
-                const isPriority = metastring?.toLowerCase().match('{priority}')
                 const hasCaption = metastring?.toLowerCase().includes('{caption:')
                 const caption = metastring?.match(/{caption: (.*?)}/)?.pop()
 
                 return (
-                    <div className="postImgWrapper">
-                        <NextImage
-                            src={image.properties.src}
-                            width={width}
-                            height={height}
-                            className="postImg"
-                            alt={alt}
-                            priority={isPriority}
-                        />
+                    <div className="postImgWrapper grid place-items-center">
+                        <img src={image.properties.src} alt={alt} className={`postImg object-scale-down max-h-[500px]`} />
                         {hasCaption ? <div className="caption" aria-label={caption}>{caption}</div> : null}
                     </div>
                 )
@@ -296,7 +284,7 @@ const PostPage = ({ postData, post }: InferGetServerSidePropsType<typeof getServ
                     <div className="flex flex-row-reverse" data-aos="fade-up" data-aos-offset="200" data-aos-delay="100">
                         <div className="hidden md:block bg-bg-sub rounded-md border border-bg-acc ml-4 sticky inset-x-0 top-[75px] left-0 h-min max-h-[70vh] w-max">
                             <div className="overflow-y-scroll max-h-[70vh]">
-                                <p className="text-2xl font-medium text-center bg-bg-acc p-2 whitespace-nowrap">Table of Contents</p>
+                                <p className="text-2xl font-bold text-center bg-bg-acc p-2 whitespace-nowrap sticky top-0">Table of Contents</p>
                                 <div className="p-4">
                                     {getNav()}
                                 </div>
