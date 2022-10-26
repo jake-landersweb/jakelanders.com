@@ -228,7 +228,7 @@ const PostPage = ({ postData, post }: InferGetServerSidePropsType<typeof getServ
                 return (
                     <div className="postImgWrapper grid place-items-center">
                         <img src={image.properties.src} alt={alt} className={`postImg object-scale-down max-h-[500px]`} />
-                        {hasCaption ? <div className="caption" aria-label={caption}>{caption}</div> : null}
+                        {hasCaption ? <div className="text-txt-400" aria-label={caption}>{caption}</div> : null}
                     </div>
                 )
             }
@@ -269,7 +269,7 @@ const PostPage = ({ postData, post }: InferGetServerSidePropsType<typeof getServ
                                 }} />
                                 <div className="">
                                     <p className="text-2xl font-bold tracking-tight">Jake Landers</p>
-                                    <p className="text-txt-400">Developer and CEO SapphireNW</p>
+                                    <p className="text-txt-400">Developer and Creator</p>
                                     <p className="text-txt-400">{postData.body.created}</p>
                                 </div>
                             </div>
@@ -282,7 +282,7 @@ const PostPage = ({ postData, post }: InferGetServerSidePropsType<typeof getServ
                         </div>
                     </div>
                     <div className="flex flex-row-reverse" data-aos="fade-up" data-aos-offset="200" data-aos-delay="100">
-                        <div className="hidden md:block bg-bg-sub rounded-md border border-bg-acc ml-4 sticky inset-x-0 top-[75px] left-0 h-min max-h-[70vh] w-max">
+                        <div className="hidden md:block bg-bg-sub rounded-md border border-bg-acc ml-4 sticky inset-x-0 top-[50px] left-0 h-min max-h-[70vh] w-max">
                             <div className="overflow-y-scroll max-h-[70vh]">
                                 <p className="text-2xl font-bold text-center bg-bg-acc p-2 whitespace-nowrap sticky top-0">Table of Contents</p>
                                 <div className="p-4">
@@ -290,13 +290,28 @@ const PostPage = ({ postData, post }: InferGetServerSidePropsType<typeof getServ
                                 </div>
                             </div>
                         </div>
-                        <div className="grid grid-cols-4 place-items-center">
-                            <div className="prose prose-stone !prose-invert prose-a:text-main max-w-full col-span-4">
-                                <ReactMarkdown components={MarkdownComponents}>
-                                    {post}
-                                </ReactMarkdown>
+                        <div className="space-y-4">
+                            <Image props={{
+                                src: postData.body.endpoint + "/image.png",
+                                alt: 'hey',
+                                divClass: '',
+                                imgClass: 'rounded-md'
+                            }} />
+                            <div className="md:hidden bg-bg-sub rounded-md">
+                                <p className="text-2xl font-bold text-center bg-bg-acc p-2 whitespace-nowrap sticky top-0 rounded-t-md">Table of Contents</p>
+                                <div className="p-4">
+                                    {getNav()}
+                                </div>
+                            </div>
+                            <div className="grid grid-cols-4 place-items-center">
+                                <div className="prose prose-stone !prose-invert prose-a:text-main max-w-full col-span-4">
+                                    <ReactMarkdown components={MarkdownComponents}>
+                                        {post}
+                                    </ReactMarkdown>
+                                </div>
                             </div>
                         </div>
+
                         {/* <div data-aos="fade-up" data-aos-offset="200" data-aos-delay="150" className="">
                             <div className="prose prose-stone !prose-invert prose-a:text-main max-w-[92vw] md:max-w-[78vw] lg:max-w-[820px]">
                             <div className="prose prose-stone !prose-invert prose-a:text-main">
