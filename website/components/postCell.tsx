@@ -1,18 +1,11 @@
 import Link from 'next/link'
 import React from 'react'
+import generateSlug from '../data/generateSlug'
 import Post from '../data/post'
 import Image from './image'
 import PostTags from './postTags'
 
 const PostCell = ({ post }: { post: Post }) => {
-
-    const generateSlug = () => {
-        const vals = post.title.split(" ")
-
-        vals.unshift(post.id.toString())
-
-        return vals.join("-").toLowerCase()
-    }
 
     var description = post.description
 
@@ -21,7 +14,7 @@ const PostCell = ({ post }: { post: Post }) => {
     }
 
     return <>
-        <Link href={`/blog/${generateSlug()}`} passHref>
+        <Link href={`/blog/${generateSlug(post)}`} passHref>
             <a>
                 <div className="border bg-bg-sub border-bg-acc rounded-md group overflow-hidden">
                     {/* <div style={styles} className={`h-[300px] ${post.imageUrl == undefined ? "bg-main bg-opacity-50 rounded-t-md" : ""}`}></div> */}

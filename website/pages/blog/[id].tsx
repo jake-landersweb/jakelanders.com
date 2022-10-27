@@ -255,6 +255,13 @@ const PostPage = ({ postData, post }: InferGetServerSidePropsType<typeof getServ
             <Head>
                 <title>{postData.body.title} - Jake Landers</title>
                 <meta name="keywords" content={postData.tags} id="keywords" />
+                <meta name="twitter:card" content="summary" />
+                <meta name="twitter:site" content="@xchecksports" />
+                <meta name="twitter:creator" content="@xchecksports" />
+                <meta property="og:url" content={`https://jakelanders.com/blog/${generateSlug(postData.body.title)}`} />
+                <meta property="og:title" content={postData.body.title} />
+                <meta property="og:description" content={postData.body.description} />
+                <meta property="og:image" content={postData.body.endpoint + "/image.png"} />
             </Head>
             <div className="grid place-items-center">
                 <div className="space-y-16">
