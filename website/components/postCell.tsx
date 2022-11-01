@@ -22,11 +22,11 @@ const PostCell = ({ post }: { post: Post }) => {
                         src: post.endpoint + "/image.png",
                         alt: '',
                         divClass: 'overflow-hidden',
-                        imgClass: 'group-hover:scale-105 transition-all'
+                        imgClass: 'md:group-hover:scale-105 transition-all'
                     }} />
                     <div className={`space-y-4 p-4 border border-t-bg-acc border-bg-sub`}>
                         <div className="">
-                            <h2 className='text-2xl font-bold tracking-tight text-white group-hover:opacity-70 transition-opacity'>{post.title}</h2>
+                            <h2 className='text-2xl font-bold tracking-tight text-white md:group-hover:opacity-70 transition-opacity'>{post.title}</h2>
                             <p className='text-txt-400 font-medium'>{post.created}</p>
                         </div>
                         <p className='font-normal text-gray-400'>{description}</p>
