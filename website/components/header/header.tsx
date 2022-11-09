@@ -23,7 +23,7 @@ const Header = () => {
 
 
     return <div className="w-screen fixed top-0 left-0">
-        <div className="grid grid-cols-3 gap-0 bg-bg-acc auto-cols-max">
+        <div className="grid grid-cols-3 gap-0 bg-bg auto-cols-max border-b border-b-bg-acc">
             <Link props={{
                 href: "https://github.com/jake-landersweb",
                 child: <div className="flex items-center space-x-2">

@@ -2,17 +2,13 @@ import { GetServerSideProps, InferGetServerSidePropsType } from "next"
 import Post from "../../data/post"
 import ApiResponse from "../../data/response"
 import Head from 'next/head'
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import PostTags from "../../components/postTags"
 import Label from "../../components/label"
 import { AiFillGithub } from 'react-icons/ai'
-import { IoPersonOutline } from 'react-icons/io5'
-import { IoTimeOutline } from 'react-icons/io5'
-import { MdUpdate } from 'react-icons/md'
 import { IoIosInformationCircleOutline } from 'react-icons/io'
 import CodeBlock from "../../components/codeBlock";
 import ReactMarkdown from "react-markdown";
-import NextImage from "next/image";
 import Image from "../../components/image";
 
 
@@ -265,30 +261,29 @@ const PostPage = ({ postData, post }: InferGetServerSidePropsType<typeof getServ
             </Head>
             <div className="grid place-items-center">
                 <div className="space-y-16">
-                    <div className="space-y-8">
-                        <div data-aos="fade-up" data-aos-offset="200" data-aos-delay="0" className="">
+                    <div className="space-y-4">
+                        <div data-aos="fade-up" data-aos-offset="200" data-aos-delay="0">
+                            <PostTags tags={postData.body.tags} textSize="text-md" />
+                        </div>
+                        <h2 className="text-4xl md:text-6xl font-bold text-left" data-aos="fade-up" data-aos-offset="200" data-aos-delay="50">{postData.body.title}</h2>
+                        <p className="text-lg text-txt-400" data-aos="fade-up" data-aos-offset="200" data-aos-delay="100">{postData.body.description}</p>
+                        <p className="" data-aos="fade-up" data-aos-offset="200" data-aos-delay="150">{postData.body.created}</p>
+                        <div data-aos="fade-up" data-aos-offset="200" data-aos-delay="200" className="">
                             <div className="flex space-x-4 items-center">
                                 <Image props={{
                                     src: "/images/jake.jpg",
                                     alt: "jake hockey",
-                                    divClass: "w-[100px] h-[100px]",
+                                    divClass: "w-[50px] h-[50px]",
                                     imgClass: "rounded-full aspect-square"
                                 }} />
                                 <div className="">
-                                    <p className="text-2xl font-bold tracking-tight">Jake Landers</p>
+                                    <p className="text-lg font-bold tracking-tight">Jake Landers</p>
                                     <p className="text-txt-400">Developer and Creator</p>
-                                    <p className="text-txt-400">{postData.body.created}</p>
                                 </div>
                             </div>
                         </div>
-                        <h2 className="text-4xl md:text-6xl text-center" data-aos="fade-up" data-aos-offset="200" data-aos-delay="50">{postData.body.title}</h2>
-                        <div className="grid place-items-center gap-y-4">
-                            <div data-aos="fade-up" data-aos-offset="200" data-aos-delay="100">
-                                <PostTags tags={postData.body.tags} textSize="text-md" />
-                            </div>
-                        </div>
                     </div>
-                    <div className="flex flex-row-reverse" data-aos="fade-up" data-aos-offset="200" data-aos-delay="100">
+                    <div className="flex flex-row-reverse" data-aos="fade-up" data-aos-offset="200" data-aos-delay="250">
                         <div className="hidden md:block bg-bg-sub rounded-md border border-bg-acc ml-4 sticky inset-x-0 top-[50px] left-0 h-min max-h-[70vh] w-max">
                             <div className="overflow-y-scroll max-h-[70vh]">
                                 <p className="text-2xl font-bold text-center bg-bg-acc p-2 whitespace-nowrap sticky top-0">Table of Contents</p>

@@ -18,9 +18,12 @@ module.exports = {
       },
       colors: {
         bg: {
-          DEFAULT: "#21252B",
-          sub: "#282C34",
-          acc: "#333842"
+          // DEFAULT: "#21252B",
+          // sub: "#282C34",
+          // acc: "#333842"
+          DEFAULT: "#0e1219",
+          sub: "#141920",
+          acc: "#1a2028"
         },
         txt: {
           DEFAULT: '#D7D7DB',
@@ -42,6 +45,7 @@ module.exports = {
           DEFAULT: "#AA6373",
           // DEFAULT: "#748CAB",
           // DEFAULT: "#83B692",
+          DEFAULT: "#896bff",
         },
       }
     },

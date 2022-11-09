@@ -1,9 +1,8 @@
 import rangeParser from 'parse-numeric-range'
 import { BiCopy, BiCheck } from 'react-icons/bi'
 
-import theme from "./theme"
+import theme from "./theme2"
 
-import ReactMarkdown from 'react-markdown'
 import { PrismLight as SyntaxHighlighter } from 'react-syntax-highlighter'
 import tsx from 'react-syntax-highlighter/dist/cjs/languages/prism/tsx'
 import typescript from 'react-syntax-highlighter/dist/cjs/languages/prism/typescript'
