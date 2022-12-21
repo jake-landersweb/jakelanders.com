@@ -5,11 +5,12 @@ import Head from 'next/head'
 import React, { useEffect } from "react";
 import PostTags from "../../components/postTags"
 import Label from "../../components/label"
-import { AiFillGithub } from 'react-icons/ai'
+import { AiFillGithub, AiFillPlayCircle } from 'react-icons/ai'
 import { IoIosInformationCircleOutline } from 'react-icons/io'
 import CodeBlock from "../../components/codeBlock";
 import ReactMarkdown from "react-markdown";
 import Image from "../../components/image";
+import Link from "../../components/link";
 
 
 
@@ -57,6 +58,8 @@ const PostPage = ({ postData, post }: InferGetServerSidePropsType<typeof getServ
 
     })
 
+    console.log(postData)
+
     const getNav = () => {
         const navItems = []
         const postLines = post.split("\n")
@@ -88,7 +91,7 @@ const PostPage = ({ postData, post }: InferGetServerSidePropsType<typeof getServ
         for (var i = 0; i < tempHeaders.length; i++) {
             const currentHeader = tempHeaders[i]
             if (currentHeader['children'].length == 0) {
-                navItems.push(createNavLink(currentHeader['title'], "text-lg font-medium text-txt-200 hover:opacity-70"))
+                navItems.push(createNavLink(currentHeader['title'], "text-lg font-medium text-txt-200 hover:text-main"))
             } else {
                 const subHeaders = []
                 // loop through children
@@ -105,7 +108,7 @@ const PostPage = ({ postData, post }: InferGetServerSidePropsType<typeof getServ
                         subHeaders.push(<div>{createNavLink(subHeader['title'], "text-txt-400 hover:text-main")}<div className="pl-4">{subsubHeaders}</div></div>)
                     }
                 }
-                navItems.push(<div>{createNavLink(currentHeader['title'], "text-lg font-medium text-txt-200 hover:opacity-70")}<div className="pl-4">{subHeaders}</div></div>)
+                navItems.push(<div>{createNavLink(currentHeader['title'], "text-lg font-medium text-txt-200 hover:text-main")}<div className="pl-4">{subHeaders}</div></div>)
             }
         }
         return navItems
@@ -293,11 +296,21 @@ const PostPage = ({ postData, post }: InferGetServerSidePropsType<typeof getServ
                             </div>
                         </div>
                         <div className="space-y-4">
-                            <Image props={{
-                                src: postData.body.endpoint + "/image.png",
-                                alt: 'hey',
-                                divClass: '',
-                                imgClass: 'rounded-md'
+                            <Link props={{
+                                href: postData.body.video == null ? "" : postData.body.video,
+                                child: <div className="container relative">
+                                    <Image props={{
+                                        src: postData.body.endpoint + "/image.png",
+                                        alt: 'hey',
+                                        divClass: '',
+                                        imgClass: 'rounded-md'
+                                    }} />
+                                    <div className={`${postData.body.video == null ? "hidden" : ""} w-1/2 h-1/2 grid place-items-center absolute top-1/4 left-1/4 rounded-lg`}>
+                                        <AiFillPlayCircle className="bg-black bg-opacity-30 rounded-full fill-white p-[2px]" size={50} />
+                                    </div>
+                                </div>,
+                                isExternal: true,
+                                className: postData.body.video == null ? "cursor-default" : "cursor-pointer hover:opacity-70 transition-all"
                             }} />
                             <div className="md:hidden bg-bg-sub rounded-md">
                                 <p className="text-2xl font-bold text-center bg-bg-acc p-2 whitespace-nowrap sticky top-0 rounded-t-md">Table of Contents</p>
@@ -313,20 +326,11 @@ const PostPage = ({ postData, post }: InferGetServerSidePropsType<typeof getServ
                                 </div>
                             </div>
                         </div>
-
-                        {/* <div data-aos="fade-up" data-aos-offset="200" data-aos-delay="150" className="">
-                            <div className="prose prose-stone !prose-invert prose-a:text-main max-w-[92vw] md:max-w-[78vw] lg:max-w-[820px]">
-                            <div className="prose prose-stone !prose-invert prose-a:text-main">
-                                <ReactMarkdown components={MarkdownComponents}>
-                                    {post}
-                                </ReactMarkdown>
-                            </div>
-                        </div> */}
                     </div>
                 </div>
             </div>
             <div className="grid place-items-center my-8">
-                <a href={getGithubLink()} target="_blank" rel="noopener noreferrer">
+                <a href={postData.body.gitLink == null ? getGithubLink() : postData.body.gitLink} target="_blank" rel="noopener noreferrer">
                     <div className="px-4 py-2 bg-bg-sub border border-bg-acc rounded-md hover:opacity-50 transition-opacity">
                         <div className="flex space-x-4 items-center">
                             <AiFillGithub size={40} />

@@ -113,7 +113,7 @@ Future<Response> scrapeRepo(Request request) async {
         var raw = await client.getRaw("/${rootObj.path}/config.yaml");
         // add the post if the record does not already exist
 
-        var yml = loadYaml(raw);
+        dynamic yml = loadYaml(raw);
 
         print("LOADED YAML = $yml");
 
@@ -123,6 +123,8 @@ Future<Response> scrapeRepo(Request request) async {
             "https://raw.githubusercontent.com/jake-landersweb/code_vault/main/${rootObj.path}";
         var image = yml['image'];
         var tags = yml['tags'];
+        String? video = yml['video'];
+        String? gitLink = yml['gitLink'];
 
         var body = {
           "title": title,
@@ -130,6 +132,8 @@ Future<Response> scrapeRepo(Request request) async {
           "endpoint": endpoint,
           "image": image,
           "tags": tags,
+          "video": video,
+          "gitLink": gitLink,
         };
 
         logger.log(body.toString());
@@ -142,14 +146,14 @@ Future<Response> scrapeRepo(Request request) async {
           logger.log("Creating new record");
           // create new record
           await conn.execute(
-            "INSERT INTO posts (title, description, endpoint, imageUrl, tags) VALUES (:title, :description, :endpoint, :image, :tags)",
+            "INSERT INTO posts (title, description, endpoint, imageUrl, tags, video, gitLink) VALUES (:title, :description, :endpoint, :image, :tags, :video, :gitLink)",
             body,
           );
         } else {
           logger.log("Updating the existing record");
           // update record
           await conn.execute(
-            "UPDATE posts SET description = :description, endpoint = :endpoint, imageUrl = :image, tags = :tags WHERE title = :title",
+            "UPDATE posts SET description = :description, endpoint = :endpoint, imageUrl = :image, tags = :tags, video = :video, gitLink = :gitLink WHERE title = :title",
             body,
           );
         }

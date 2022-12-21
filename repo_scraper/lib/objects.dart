@@ -43,6 +43,8 @@ class PostObject {
   late String endpoint;
   String? imageUrl;
   late String tags;
+  String? video;
+  String? gitLink;
 
   PostObject({
     required this.id,
@@ -51,6 +53,8 @@ class PostObject {
     required this.endpoint,
     this.imageUrl,
     required this.tags,
+    this.video,
+    this.gitLink,
   });
 
   PostObject.fromJson(dynamic json) {
@@ -60,5 +64,7 @@ class PostObject {
     endpoint = json['endpoint'];
     imageUrl = json['imageUrl'];
     tags = json['tags'];
+    video = json['video'];
+    gitLink = json['gitLink'];
   }
 }
