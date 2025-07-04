@@ -1,33 +1,21 @@
-# Alternative approach with explicit target platform for runtime stage
-FROM --platform=$BUILDPLATFORM dart:stable AS build
+# Use latest stable channel SDK.
+FROM dart:stable AS build
 
+# Resolve app dependencies.
 WORKDIR /app
-
-# Copy pubspec files first for better dependency caching
 COPY pubspec.* ./
+RUN dart pub get
 
-# Install dependencies with cache mount
-RUN --mount=type=cache,target=/root/.pub-cache \
-    dart pub get
-
-# Copy app source code
+# Copy app source code (except anything in .dockerignore) and AOT compile app.
 COPY . .
+RUN dart compile exe bin/server.dart -o bin/server
 
-# AOT compile app with cache mount
-RUN --mount=type=cache,target=/root/.pub-cache \
-    dart compile exe bin/server.dart -o bin/server
-
-# Runtime stage - use target platform for proper binary compatibility
-FROM dart:stable AS runtime
-
-# Extract just the runtime components we need
-RUN mkdir -p /runtime-target && \
-    cp -r /runtime/* /runtime-target/
-
-# Final minimal image
+# Build minimal serving image from AOT-compiled `/server`
+# and the pre-built AOT-runtime in the `/runtime/` directory of the base image.
 FROM scratch
-COPY --from=runtime /runtime-target/ /
+COPY --from=build /runtime/ /
 COPY --from=build /app/bin/server /app/bin/
 
+# Start server.
 EXPOSE 8081
 CMD ["/app/bin/server"]
