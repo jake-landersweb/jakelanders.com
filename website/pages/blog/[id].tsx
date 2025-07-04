@@ -13,7 +13,6 @@ import Image from "../../components/image";
 import Link from "../../components/link";
 
 
-
 export const getServerSideProps: GetServerSideProps = async (context) => {
     // get id from params
     const id = context.params!.id?.toString().split("-")[0]
@@ -57,8 +56,6 @@ const PostPage = ({ postData, post }: InferGetServerSidePropsType<typeof getServ
         // create navigation header
 
     })
-
-    console.log(postData)
 
     const getNav = () => {
         const navItems = []
