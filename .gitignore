@@ -1,5 +1,17 @@
+node_modules/
+dist/
+.output/
+.tanstack/
+.vite/
+*.tsbuildinfo
+.DS_Store
+.env
+.env.*
+!.env.example
+.agent/
+
+# Local files from the old Docker Compose setup
 init.sql
 docker-compose.yaml
 mysql/
 logs/
-*.DS_STORE

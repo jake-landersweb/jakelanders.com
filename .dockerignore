@@ -1,0 +1,11 @@
+node_modules
+dist
+.output
+.tanstack
+.vite
+.agent
+.git
+mysql
+logs
+docker-compose.yaml
+init.sql
