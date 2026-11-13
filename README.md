@@ -42,3 +42,15 @@ The content worker owns `src/content/data.ts`, `src/content/posts/`, `public/ima
 - Only the requested link colors add color. Post images are displayed in monochrome through CSS; the original image files are unchanged.
 
 References checked during implementation: [TanStack setup](https://tanstack.com/start/latest/docs/framework/react/build-from-scratch), [static prerendering](https://tanstack.com/start/latest/docs/framework/react/guide/static-prerendering), [Oxfmt configuration](https://oxc.rs/docs/guide/usage/formatter/config.html), and the live npm registry for released package versions.
+
+## Cloudflare production hosting
+
+Pushes to `main` deploy `dist/client` to the `jake-site` Worker via
+`.github/workflows/deploy.yml`. CI requires `CLOUDFLARE_API_TOKEN` (scoped
+Workers token) and `CLOUDFLARE_ACCOUNT_ID` repository secrets. Run `pnpm build`
+and `pnpm exec wrangler deploy --dry-run` to validate locally with Node 24.
+
+`worker.js` preserves the legacy redirects, immutable asset caching and the
+existing plain 404 for `www.jakelanders.com`. Other missing pages use the
+prerendered `404.html`. Docker files remain for rollback; CI no longer
+publishes container images.
