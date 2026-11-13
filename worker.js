@@ -9,7 +9,13 @@ export default {
       url.pathname = url.pathname === '/contact' ? '/' : '/posts'
       return Response.redirect(url.toString(), 301)
     }
-    const response = await env.ASSETS.fetch(request)
+    let response = await env.ASSETS.fetch(request)
+    // nginx served folder indexes without forcing a trailing-slash redirect.
+    if (response.status === 404 && !url.pathname.startsWith('/assets/')) {
+      const indexUrl = new URL(request.url)
+      indexUrl.pathname = `${url.pathname.replace(/\/$/, '')}/index.html`
+      response = await env.ASSETS.fetch(new Request(indexUrl, request))
+    }
     if (url.pathname.startsWith('/assets/') && response.ok) {
       const cached = new Response(response.body, response)
       cached.headers.set('Cache-Control', 'public, max-age=31536000, immutable')
